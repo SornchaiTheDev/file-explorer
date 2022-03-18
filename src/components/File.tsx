@@ -25,9 +25,9 @@ const getIcon = (type: string) => {
 
 function File({ name, type }: FileInterface): JSX.Element {
   return (
-    <div className="flex flex-col space-y-3 items-center p-6 cursor-pointer">
+    <div className="flex flex-col space-y-3 justify-center items-center p-6 cursor-pointer">
       <i className={`${getIcon(type)} text-5xl`} />
-      <h3>{name}</h3>
+      <h3 className='text-center'>{name}</h3>
     </div>
   );
 }
