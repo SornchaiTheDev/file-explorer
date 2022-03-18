@@ -6,7 +6,7 @@ function Content(): JSX.Element {
   const { name } = currentPath;
 
   return (
-    <div className="col-span-3 p-4">
+    <div className="col-span-3 p-4 h-screen overflow-scroll">
       <div className="flex space-x-2 items-center cursor-pointer w-fit">
         <i className="bi bi-arrow-left text-2xl font-bold"></i>
         <i className="bi bi-arrow-right text-2xl font-bold text-gray-500"></i>
