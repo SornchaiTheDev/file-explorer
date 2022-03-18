@@ -26,11 +26,13 @@ const getIcon = (type: string) => {
 };
 
 function FileHorizontal({ name, type }: FileInterface): JSX.Element {
-  const { addRecentFile, root, setCurrentPath, setHistory } = useAppContext();
+  const { addRecentFile, root, setCurrentPath, setHistory, setHistoryIndex } =
+    useAppContext();
   const handleFileClick = () => {
     addRecentFile({ name, type });
     setCurrentPath({ name, path: path.join(root, name) });
     setHistory((prev) => [...prev, { name, path: path.join(root, name) }]);
+    setHistoryIndex((prev) => prev + 1);
   };
   return (
     <div

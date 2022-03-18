@@ -20,8 +20,6 @@ const useFileSystem = () => {
     const dirContent = fs.readdirSync(currentPath);
     const files: FileInterface[] = [];
 
-    console.log(currentPath);
-
     dirContent.forEach((file) => {
       if (file !== '.localized' && file !== '.DS_Store') {
         const isDirectory = fs

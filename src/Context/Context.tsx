@@ -19,6 +19,9 @@ interface ContextInterface {
   currentPath: CurrentDir;
   setCurrentPath: React.Dispatch<React.SetStateAction<CurrentDir>>;
   setHistory: React.Dispatch<React.SetStateAction<CurrentDir[]>>;
+  goBack: () => void;
+  goNext: () => void;
+  setHistoryIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 interface Props {
@@ -34,6 +37,9 @@ export const CTX = createContext<ContextInterface>({
   currentPath: { name: 'Home', path: '/Users/imdev' },
   setCurrentPath: () => {},
   setHistory: () => {},
+  setHistoryIndex: () => {},
+  goBack: () => {},
+  goNext: () => {},
 });
 
 const Context = ({ children }: Props) => {
@@ -42,10 +48,25 @@ const Context = ({ children }: Props) => {
   const [directories, setDirectories] = useState<File[]>([]);
   const [content, setContent] = useState<File[]>([]);
   const [history, setHistory] = useState<CurrentDir[]>([]);
+  const [historyIndex, setHistoryIndex] = useState<number>(-1);
   const [currentPath, setCurrentPath] = useState<CurrentDir>({
     path: root,
     name: 'root',
   });
+
+  const goBack = () => {
+    if (history.length < 2) return;
+    const { path, name } = history[historyIndex];
+    setCurrentPath({ name, path });
+    if (historyIndex > 0) setHistoryIndex(historyIndex - 1);
+  };
+
+  const goNext = () => {
+    if (history.length < 2 || historyIndex + 1 === history.length) return;
+    const { path, name } = history[historyIndex + 1];
+    if (historyIndex < history.length) setHistoryIndex(historyIndex + 1);
+    setCurrentPath({ name, path });
+  };
 
   const { getFolders, getContent } = useFileSystem();
 
@@ -53,6 +74,7 @@ const Context = ({ children }: Props) => {
     const { folders, path } = getFolders(currentPath.path);
     setDirectories(folders);
     setCurrentPath({ path: path, name: 'Home' });
+    setHistory((prev) => [...prev, { name: 'Home', path }]);
   }, []);
 
   useEffect(() => {
@@ -74,6 +96,9 @@ const Context = ({ children }: Props) => {
     content,
     addRecentFile,
     setHistory,
+    setHistoryIndex,
+    goBack,
+    goNext,
   };
 
   return <CTX.Provider value={value}>{children}</CTX.Provider>;
