@@ -21,6 +21,8 @@ interface ContextInterface {
   setHistory: React.Dispatch<React.SetStateAction<CurrentDir[]>>;
   goBack: () => void;
   goNext: () => void;
+  historyLength: number;
+  historyIndex: number;
   setHistoryIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
@@ -37,6 +39,8 @@ export const CTX = createContext<ContextInterface>({
   currentPath: { name: 'Home', path: '/Users/imdev' },
   setCurrentPath: () => {},
   setHistory: () => {},
+  historyLength: 0,
+  historyIndex: 0,
   setHistoryIndex: () => {},
   goBack: () => {},
   goNext: () => {},
@@ -48,21 +52,24 @@ const Context = ({ children }: Props) => {
   const [directories, setDirectories] = useState<File[]>([]);
   const [content, setContent] = useState<File[]>([]);
   const [history, setHistory] = useState<CurrentDir[]>([]);
-  const [historyIndex, setHistoryIndex] = useState<number>(-1);
+  const [historyIndex, setHistoryIndex] = useState<number>(0);
   const [currentPath, setCurrentPath] = useState<CurrentDir>({
     path: root,
     name: 'root',
   });
+  useEffect(() => {
+    console.log(historyIndex);
+  }, [historyIndex]);
 
   const goBack = () => {
-    if (history.length < 2) return;
-    const { path, name } = history[historyIndex];
+    if (historyIndex <= 0) return;
+    const { path, name } = history[historyIndex - 1];
     setCurrentPath({ name, path });
     if (historyIndex > 0) setHistoryIndex(historyIndex - 1);
   };
 
   const goNext = () => {
-    if (history.length < 2 || historyIndex + 1 === history.length) return;
+    if (historyIndex + 1 === history.length) return;
     const { path, name } = history[historyIndex + 1];
     if (historyIndex < history.length) setHistoryIndex(historyIndex + 1);
     setCurrentPath({ name, path });
@@ -96,6 +103,8 @@ const Context = ({ children }: Props) => {
     content,
     addRecentFile,
     setHistory,
+    historyLength: history.length,
+    historyIndex,
     setHistoryIndex,
     goBack,
     goNext,
