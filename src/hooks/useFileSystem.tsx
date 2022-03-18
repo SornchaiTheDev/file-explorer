@@ -7,11 +7,10 @@ const useFileSystem = () => {
     const dir = fs.readdirSync(currentPath);
     const folders: FileInterface[] = [];
     dir.forEach((file) => {
-      const isDirectory = fs
-        .statSync(path.join(currentPath, file))
-        .isDirectory();
+      const filePath = path.join(currentPath, file);
+      const isDirectory = fs.statSync(filePath).isDirectory();
       if (isDirectory && file[0] !== '.')
-        folders.push({ name: file, type: 'folder' });
+        folders.push({ name: file, type: 'folder', path: filePath });
     });
     return { folders, path: currentPath };
   };
@@ -22,14 +21,14 @@ const useFileSystem = () => {
 
     dirContent.forEach((file) => {
       if (file !== '.localized' && file !== '.DS_Store') {
-        const isDirectory = fs
-          .statSync(path.join(currentPath, file))
-          .isDirectory();
+        const filePath = path.join(currentPath, file);
+        const isDirectory = fs.statSync(filePath).isDirectory();
         if (!isDirectory) {
-          const fileType = file.split('.')[1];
-          files.push({ name: file, type: fileType });
+          const fileArr = file.split('.');
+          const fileType = fileArr[fileArr.length - 1];
+          files.push({ name: file, type: fileType, path: filePath });
         } else {
-          files.push({ name: file, type: 'folder' });
+          files.push({ name: file, type: 'folder', path: filePath });
         }
       }
     });

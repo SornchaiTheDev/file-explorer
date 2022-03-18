@@ -25,19 +25,13 @@ const getIcon = (type: string) => {
   }
 };
 
-function FileHorizontal({ name, type }: FileInterface): JSX.Element {
-  const { addRecentFile, root, setCurrentPath, setHistory, setHistoryIndex } =
-    useAppContext();
-  const handleFileClick = () => {
-    addRecentFile({ name, type });
-    setCurrentPath({ name, path: path.join(root, name) });
-    setHistory((prev) => [...prev, { name, path: path.join(root, name) }]);
-    setHistoryIndex((prev) => prev + 1);
-  };
+function FileHorizontal(file: FileInterface): JSX.Element {
+  const { handleFileClick } = useAppContext();
+  const { name, type } = file;
   return (
     <div
       className="flex space-x-3 items-center cursor-pointer"
-      onClick={handleFileClick}
+      onClick={() => handleFileClick(file)}
     >
       <i className={`${getIcon(type)} text-2xl`} />
       <h3>{name}</h3>

@@ -6,7 +6,7 @@ function Content(): JSX.Element {
     useAppContext();
   const { name } = currentPath;
 
-  console.log(historyIndex, historyLength);
+  console.log(content);
 
   return (
     <div className="col-span-3 p-4 h-screen overflow-scroll">
@@ -27,8 +27,8 @@ function Content(): JSX.Element {
         <h1 className="text-2xl font-bold">{name}</h1>
       </div>
       <div className="grid grid-cols-4 gap-4 mt-10">
-        {content.map(({ name, type }) => (
-          <File key={name} name={name} type={type} />
+        {content.map(({ name, type, path }) => (
+          <File key={name} name={name} type={type} path={path} />
         ))}
       </div>
     </div>

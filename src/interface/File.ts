@@ -1,4 +1,6 @@
+import { DefaultExtensionType } from 'react-file-icon/index';
 export default interface FileInterface {
-  type: string;
+  type: DefaultExtensionType | 'folder';
   name: string;
+  path: string;
 }

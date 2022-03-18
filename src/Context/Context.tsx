@@ -8,6 +8,8 @@ import {
 import File from '../interface/File';
 import useFileSystem from '../hooks/useFileSystem';
 import os from 'os';
+import * as path from 'path';
+import FileInterface from '../interface/File';
 
 type CurrentDir = { name: string; path: string };
 interface ContextInterface {
@@ -24,6 +26,7 @@ interface ContextInterface {
   historyLength: number;
   historyIndex: number;
   setHistoryIndex: React.Dispatch<React.SetStateAction<number>>;
+  handleFileClick: (file: File) => void;
 }
 
 interface Props {
@@ -44,6 +47,7 @@ export const CTX = createContext<ContextInterface>({
   setHistoryIndex: () => {},
   goBack: () => {},
   goNext: () => {},
+  handleFileClick: () => {},
 });
 
 const Context = ({ children }: Props) => {
@@ -57,9 +61,6 @@ const Context = ({ children }: Props) => {
     path: root,
     name: 'root',
   });
-  useEffect(() => {
-    console.log(historyIndex);
-  }, [historyIndex]);
 
   const goBack = () => {
     if (historyIndex <= 0) return;
@@ -73,6 +74,19 @@ const Context = ({ children }: Props) => {
     const { path, name } = history[historyIndex + 1];
     if (historyIndex < history.length) setHistoryIndex(historyIndex + 1);
     setCurrentPath({ name, path });
+  };
+
+  const addRecentFile = (file: File) => {
+    const isExist = recents.find((recent) => recent.name === file.name);
+    if (!isExist) setRecents((prev) => [...prev, file]);
+  };
+
+  const handleFileClick = ({ name, type, path }: FileInterface) => {
+    if (type !== 'folder') return;
+    addRecentFile({ name, type, path });
+    setCurrentPath({ name, path });
+    setHistory((prev) => [...prev, { name, path }]);
+    setHistoryIndex((prev) => prev + 1);
   };
 
   const { getFolders, getContent } = useFileSystem();
@@ -89,11 +103,6 @@ const Context = ({ children }: Props) => {
     setContent(files);
   }, [currentPath]);
 
-  const addRecentFile = (file: File) => {
-    const isExist = recents.find((recent) => recent.name === file.name);
-    if (!isExist) setRecents((prev) => [...prev, file]);
-  };
-
   const value = {
     root,
     currentPath,
@@ -108,6 +117,7 @@ const Context = ({ children }: Props) => {
     setHistoryIndex,
     goBack,
     goNext,
+    handleFileClick,
   };
 
   return <CTX.Provider value={value}>{children}</CTX.Provider>;
