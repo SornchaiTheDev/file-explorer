@@ -1,40 +1,23 @@
+import { useEffect } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
-import './App.css';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const Hello = () => {
+  useEffect(() => {
+    fs.readdir('/Users/imdev', (err: any, data: string[]) => {
+      if (err) throw err;
+      data.map((file) => {
+        const type = fs.statSync(path.join('/Users/imdev', file)).isDirectory();
+        if (type && file[0] !== '.') {
+          console.log(file);
+        }
+      });
+    });
+  }, []);
   return (
-    <div>
-      <div className="Hello">
-        <img width="200px" alt="icon" src={icon} />
-      </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
-      </div>
+    <div className="w-full h-screen">
+      <h1>hello world</h1>
     </div>
   );
 };

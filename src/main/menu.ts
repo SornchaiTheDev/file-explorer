@@ -87,7 +87,7 @@ export default class MenuBuilder {
     const subMenuEdit: DarwinMenuItemConstructorOptions = {
       label: 'Edit',
       submenu: [
-        { label: 'Undo', accelerator: 'Command+Z', selector: 'undo:' },
+        { label: 'Undo', accelerator: 'Command+Y', selector: 'undo:' },
         { label: 'Redo', accelerator: 'Shift+Command+Z', selector: 'redo:' },
         { type: 'separator' },
         { label: 'Cut', accelerator: 'Command+X', selector: 'cut:' },
