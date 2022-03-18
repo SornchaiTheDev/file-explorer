@@ -1,6 +1,7 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import LeftNavbar from 'components/LeftNavbar';
 import Content from 'components/Content';
+import Context from '../Context/Context';
 
 const Main = () => {
   return (
@@ -13,10 +14,12 @@ const Main = () => {
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Main />} />
-      </Routes>
-    </Router>
+    <Context>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Main />} />
+        </Routes>
+      </Router>
+    </Context>
   );
 }
