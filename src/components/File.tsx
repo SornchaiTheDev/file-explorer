@@ -2,13 +2,23 @@ import FileInterface from '../interface/File';
 import { useAppContext } from 'Context/Context';
 import { FileIcon, defaultStyles } from 'react-file-icon';
 
+declare global {
+  interface Window {
+    electron?: any;
+  }
+}
+
 function File(file: FileInterface): JSX.Element {
   const { handleFileClick } = useAppContext();
   const { name, type } = file;
+  const openFile = () => {
+    if (type === 'folder') return handleFileClick(file);
+    window.electron.openFile(file);
+  };
   return (
     <div
       className="flex flex-col space-y-3 justify-center items-center p-6 cursor-pointer"
-      onClick={() => handleFileClick(file)}
+      onClick={openFile}
     >
       {type === 'folder' ? (
         <i className="bi bi-folder text-6xl"></i>
