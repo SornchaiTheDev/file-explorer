@@ -1,23 +1,10 @@
-import { useEffect } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import * as fs from 'fs';
-import * as path from 'path';
+import LeftNavbar from 'components/LeftNavbar';
 
-const Hello = () => {
-  useEffect(() => {
-    fs.readdir('/Users/imdev', (err: any, data: string[]) => {
-      if (err) throw err;
-      data.map((file) => {
-        const type = fs.statSync(path.join('/Users/imdev', file)).isDirectory();
-        if (type && file[0] !== '.') {
-          console.log(file);
-        }
-      });
-    });
-  }, []);
+const Main = () => {
   return (
-    <div className="w-full h-screen">
-      <h1>hello world</h1>
+    <div className="bg-transparent grid grid-cols-4 min-h-screen">
+      <LeftNavbar />
     </div>
   );
 };
@@ -26,7 +13,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Hello />} />
+        <Route path="/" element={<Main />} />
       </Routes>
     </Router>
   );
